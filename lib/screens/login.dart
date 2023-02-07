@@ -47,9 +47,9 @@ class _LoginPageState extends State<LoginPage> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.accessible_forward_outlined),
+          prefixIcon: Icon(Icons.email),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "username",
+          hintText: "Email",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           )),
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           signin(
-              EmailController.text + "@froggo.com", passwordController.text);
+              EmailController.text, passwordController.text);
         },
         child: Text(
           "login",
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
           .then((uid){
         HelpFunctions.saveuserloggedinsharedref(true);
         HelpFunctions.saveusernamesharedref(EmailController.text);
-        Navigator.of(context).push(CustomPageRoute(child: HomeScreen()));
+        Navigator.of(context).pushReplacement(CustomPageRoute(child: HomeScreen()));
       }).catchError((e) {
         print("error007 is ==" + e!.message);
         if (e == null) {
