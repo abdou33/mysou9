@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mysou9/screens/Home.dart';
 import 'package:mysou9/screens/login.dart';
+
+import 'helper/userdata.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,17 +12,43 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool? isuserloggedin;
+  String? uid;
+  @override
+  void initState() {
+    getloggedinstate();
+    super.initState();
+  }
+
+  getloggedinstate() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
+    uid = user!.uid;
+
+    await HelpFunctions.getuserloggedinsharedref().then((value) {
+      print("value1 is = " + value.toString());
+      setState(() {
+        isuserloggedin = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(),
+      home: isuserloggedin != null
+          ? isuserloggedin == true
+              ? uid == null ? Center(child: CircularProgressIndicator(color: Colors.pink,)) : HomeScreen(uid: uid)
+              : LoginPage()
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }

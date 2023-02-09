@@ -726,7 +726,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Fluttertoast.showToast(msg: "account created successfully");
 
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        context, MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid,)));
   }
 
 
@@ -815,6 +815,6 @@ class _RegisterPageState extends State<RegisterPage> {
     Fluttertoast.showToast(msg: "account created successfully");
 
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        context, MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)));
   }
 }

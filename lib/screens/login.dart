@@ -179,8 +179,8 @@ class _LoginPageState extends State<LoginPage> {
           .signInWithEmailAndPassword(email: email, password: pass)
           .then((uid){
         HelpFunctions.saveuserloggedinsharedref(true);
-        HelpFunctions.saveusernamesharedref(EmailController.text);
-        Navigator.of(context).pushReplacement(CustomPageRoute(child: HomeScreen()));
+        HelpFunctions.saveusernamesharedref(uid.credential.toString());
+        Navigator.of(context).pushReplacement(CustomPageRoute(child: HomeScreen(uid: uid.user!.uid)));
       }).catchError((e) {
         print("error007 is ==" + e!.message);
         if (e == null) {
