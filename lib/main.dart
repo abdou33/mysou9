@@ -20,7 +20,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool? isuserloggedin;
+  bool? isuserloggedin = false;
   String? uid;
   @override
   void initState() {
@@ -31,12 +31,16 @@ class _MyAppState extends State<MyApp> {
   getloggedinstate() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final user = auth.currentUser;
-    uid = user!.uid;
+    if(user != null){
+      uid = user!.uid;
+    }
 
     await HelpFunctions.getuserloggedinsharedref().then((value) {
       print("value1 is = " + value.toString());
       setState(() {
-        isuserloggedin = value;
+        if(value != null){
+          isuserloggedin = value;
+        }
       });
     });
   }
@@ -44,6 +48,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+          fontFamily: 'PTSansNarrow',
+          // appBarTheme: AppBarTheme(
+          //     backgroundColor:
+          //         g == "male" ? Colors.blue[100] : Colors.pink[100]),
+          // scaffoldBackgroundColor:
+          //     g == "male" ? Colors.blue[50] : Colors.pink[50],
+          // cardColor: g == "male" ? Colors.blue[100] : Colors.pink[100]
+          ),
       home: isuserloggedin != null
           ? isuserloggedin == true
               ? uid == null ? Center(child: CircularProgressIndicator(color: Colors.pink,)) : HomeScreen(uid: uid)

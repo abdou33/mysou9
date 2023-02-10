@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:mysou9/screens/boutique/boutiqueprofile.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -67,6 +68,14 @@ class _UserHomeState extends State<UserHome> {
         padding: EdgeInsets.all(5),
         child: Column(
           children: [
+            Text("user"),
+            TextButton(
+              child: Text("text"),
+              onPressed: () {
+                Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Boutiqueprofile()));
+              },
+            ),
           ],
         ),
       ),

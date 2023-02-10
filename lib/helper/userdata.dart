@@ -17,9 +17,9 @@ class HelpFunctions {
   }
 
   //getting the data from sharedpreferences
-  static Future<bool> getuserloggedinsharedref() async {
+  static Future<bool?> getuserloggedinsharedref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.getBool(sharedpreferencesuserloggedin)!;
+    return await prefs.getBool(sharedpreferencesuserloggedin);
   }
 
   static Future<String?> getusernamesharedref() async {
