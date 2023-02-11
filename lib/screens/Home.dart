@@ -23,14 +23,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("uid= $uid ");
+    //print("uid= $uid ");
     userorboutique();
     super.initState();
   }
 
   userorboutique() {
     FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid).get().then((querySnapshot) {
-      print("total equals in users == \t" + querySnapshot.docs.length.toString());
+      //print("total equals in users == \t" + querySnapshot.docs.length.toString());
       if(querySnapshot.docs.length == 1){
         Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => UserHome()));
