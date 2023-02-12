@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:mysou9/screens/boutique/boutiqueprofile.dart';
+import 'package:mysou9/screens/user/productpage.dart';
 import 'package:mysou9/widgets/userdrawer.dart';
 
 import '../../helper/getgoods.dart';
@@ -76,6 +77,7 @@ class _UserHomeState extends State<UserHome> {
                           data["name"].toString(),
                           data["price"],
                           data["photos"][0],
+                          data["id"],
                         );
                       }).toList(),
                     ),
@@ -108,20 +110,15 @@ class _UserHomeState extends State<UserHome> {
   }
 
   void initState() {
-    print("first");
     getuserinfo();
     super.initState();
   }
 
   getuserinfo() async {
     goodsdata.getproducts().then((value) {
-      print("snapshot data ======================== \t" + value.toString());
-
       setState(() {
-        print(goodsstream.toString());
         goodsstream = value;
         //isloading = true;
-        print(goodsstream.toString());
         // Future.delayed(Duration(seconds: 5), () {
         //   setState(() {
         //
@@ -144,13 +141,12 @@ class _UserHomeState extends State<UserHome> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                print(_searchBoolean.toString());
+                //print(_searchBoolean.toString());
                 setState(() {
                   _searchBoolean
                       ? _searchBoolean = false
                       : _searchBoolean = true;
                 });
-                print(_searchBoolean.toString());
               }),
         ],
       ),
@@ -160,52 +156,68 @@ class _UserHomeState extends State<UserHome> {
 }
 
 class recipestile extends StatelessWidget {
+  String id;
   final String name;
   final int price;
   final image;
 
-  recipestile(this.name, this.price, this.image);
+  recipestile(this.name, this.price, this.image, this.id);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => recipe(titlename),
-        //     ));
+        showModalBottomSheet<void>(
+          isScrollControlled: true,
+          context: context,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0),
+                topRight: Radius.circular(15.0)),
+          ),
+          builder: (BuildContext context) {
+            return ProductPage(id: id,);
+          },
+        );
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        child: Card(
-          shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10),),
-      ),
-       elevation: 4.0,
-       child: Column(
-           children: [
-             Container(
-               height: 200.0,
-               child: Ink.image(
-                 image: NetworkImage(image),
-                 fit: BoxFit.cover,
-               ),
-             ),
-             Container(
-               padding: EdgeInsets.all(16.0),
-               alignment: Alignment.centerLeft,
-               child: Column(
-                 children: [
-                   Text(name, style: TextStyle(fontSize: 20),),
-                   Text(price.toString() + " DA", style: TextStyle(fontSize: 20, color: Color(0xFFbe332e)),),
-                 ],
-               ),
-             ),
-           ],
-         ),
-)
-      ),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            elevation: 4.0,
+            child: Column(
+              children: [
+                Container(
+                  height: 200.0,
+                  child: Ink.image(
+                    image: NetworkImage(image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        price.toString() + " DA",
+                        style:
+                            TextStyle(fontSize: 20, color: Color(0xFFbe332e)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

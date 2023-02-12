@@ -7,10 +7,17 @@ class databasemethods {
         .snapshots();
   }
 
-  getrecipedetails(String title) async {
+  getproductdetails(String title) async {
     return await FirebaseFirestore.instance
         .collection("produits")
-        .where("العنوان", isEqualTo: title)
+        .where("id", isEqualTo: title)
+        .get();
+  }
+
+  getsellerproducts(String title) async {
+    return await FirebaseFirestore.instance
+        .collection("produits")
+        .where("seller", isEqualTo: title)
         .get();
   }
 }
