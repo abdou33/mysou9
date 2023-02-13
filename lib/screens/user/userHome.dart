@@ -168,6 +168,7 @@ class recipestile extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet<void>(
+          enableDrag: false,
           isScrollControlled: true,
           context: context,
           shape: RoundedRectangleBorder(

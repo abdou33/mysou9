@@ -95,7 +95,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Color(0xFFbe332e),
         title: Text(widget.theotheruser),
       ),
       body: Container(
@@ -111,7 +111,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 padding: EdgeInsets.all(0),
-                color: Colors.orange,
+                color: Color(0xFFbe332e),
                 child: Row(
                   children: [
                     Expanded(
@@ -127,7 +127,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             color: Colors.white,
                           ),
                           decoration: InputDecoration(
-                            hintText: "say something nice",
+                            hintText: "Type a message...",
                             hintStyle: TextStyle(
                               color: Colors.white,
                             ),
@@ -150,7 +150,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(40)),
-                          child: Image.asset("assets/logo.jpeg"),
+                          child: Image.asset("assets/send.png"),
                         ),
                       ),
                     ),
