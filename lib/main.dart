@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final user = auth.currentUser;
     if(user != null){
-      uid = user!.uid;
+      uid = user.uid;
     }
 
     await HelpFunctions.getuserloggedinsharedref().then((value) {

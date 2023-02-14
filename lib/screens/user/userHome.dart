@@ -16,39 +16,9 @@ class UserHome extends StatefulWidget {
 }
 
 class _UserHomeState extends State<UserHome> {
-  bool _searchBoolean = false; //add
-  String searchresult = "";
   bool isloading = false;
   Stream<QuerySnapshot>? goodsstream;
   databasemethods goodsdata = new databasemethods();
-
-  Widget _searchTextField() {
-    //add
-    return TextField(
-      onChanged: (Text) {
-        setState(() {
-          searchresult = Text;
-        });
-      },
-      textAlign: TextAlign.left,
-      autofocus: true,
-      cursorColor: Colors.white,
-      textDirection: TextDirection.ltr,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-      ),
-      textInputAction: TextInputAction.search,
-      decoration: InputDecoration.collapsed(
-        hintText: 'Search',
-        hintTextDirection: TextDirection.rtl,
-        hintStyle: TextStyle(
-          color: Colors.white60,
-          fontSize: 20,
-        ),
-      ),
-    );
-  }
 
   Widget recipeslist() {
     return StreamBuilder(
@@ -67,7 +37,17 @@ class _UserHomeState extends State<UserHome> {
                       return Future<void>.delayed(
                           const Duration(milliseconds: 10));
                     },
-                    child: ListView(
+                    child: GridView(
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.0,
+                        crossAxisSpacing: 0.0,
+                        mainAxisSpacing: 1,
+                        mainAxisExtent: 264,
+                      ),
                       children:
                           snapshot.data!.docs.map((DocumentSnapshot document) {
                         Map<String, dynamic> data =
@@ -128,29 +108,92 @@ class _UserHomeState extends State<UserHome> {
     });
   }
 
+  int pagesindex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      pagesindex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       drawer: UserDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xFFbe332e),
-        title: !_searchBoolean ? SizedBox.shrink() : _searchTextField(),
-        actions: [
-          !_searchBoolean ? SizedBox.shrink() : Icon(Icons.tune),
-          // Navigate to the Search Screen
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                //print(_searchBoolean.toString());
-                setState(() {
-                  _searchBoolean
-                      ? _searchBoolean = false
-                      : _searchBoolean = true;
-                });
-              }),
-        ],
       ),
-      body: Padding(padding: EdgeInsets.all(5), child: recipeslist()),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_outline),
+            label: 'Favourites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_outlined),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.manage_accounts_outlined),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: pagesindex,
+        selectedItemColor: Color(0xFFbe332e),
+        unselectedItemColor: Colors.grey,
+        onTap: ((value) {
+          _onItemTapped(value);
+        }),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Form(
+              child: Container(
+                width: 320,
+                height: 50,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Color(0xFFbe332e)),
+                    borderRadius: BorderRadius.circular(30)),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    alignLabelWithHint: true,
+                      hintText: "Search products",
+                      //contentPadding: EdgeInsets.only(right: 10.0),
+                      suffixIcon: Icon(Icons.search),
+                      border: InputBorder.none,
+                      ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: ((width) / 4) * 2,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: options.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      GridOptions(layout: options[index]),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 8.0,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(child: recipeslist()),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -177,12 +220,14 @@ class recipestile extends StatelessWidget {
                 topRight: Radius.circular(15.0)),
           ),
           builder: (BuildContext context) {
-            return ProductPage(id: id,);
+              return ProductPage(
+                id: id,
+              );
           },
         );
       },
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
@@ -190,35 +235,94 @@ class recipestile extends StatelessWidget {
               ),
             ),
             elevation: 4.0,
-            child: Column(
-              children: [
-                Container(
-                  height: 200.0,
-                  child: Ink.image(
-                    image: NetworkImage(image),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    children: [
-                      Text(
-                        name,
-                        style: TextStyle(fontSize: 20),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child: Card(
+                    elevation: 0,
+                    //color: Colors.purpleAccent,
+                      child: Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Expanded(
+                                child: Image.network(
+                                  image,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      name,
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text(
+                                      price.toString() + " DA",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color(0xFFbe332e)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Text(
-                        price.toString() + " DA",
-                        style:
-                            TextStyle(fontSize: 20, color: Color(0xFFbe332e)),
-                      ),
-                    ],
                   ),
-                ),
-              ],
+                ))));
+  }
+}
+
+class GridLayout {
+  final String title;
+  final IconData icon;
+
+  GridLayout({required this.title, required this.icon});
+}
+
+List<GridLayout> options = [
+  GridLayout(title: 'See all', icon: Icons.grid_view_rounded),
+  GridLayout(title: 'Furnitures', icon: Icons.home),
+  GridLayout(title: 'Men', icon: Icons.man_rounded),
+  GridLayout(title: 'Women', icon: Icons.woman_rounded),
+  GridLayout(title: 'Electronics', icon: Icons.electrical_services_rounded),
+  GridLayout(title: 'Book', icon: Icons.book),
+  GridLayout(title: 'Mobiles', icon: Icons.mobile_friendly_rounded),
+  GridLayout(title: 'Kids', icon: Icons.child_care_rounded),
+];
+
+class GridOptions extends StatelessWidget {
+  final GridLayout layout;
+  GridOptions({required this.layout});
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      color: Colors.white,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              layout.icon,
+              size: 25,
+              color: Color(0xFFbe332e),
             ),
-          )),
+            Text(
+              layout.title,
+              style: TextStyle(fontSize: 15, color: Colors.black),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

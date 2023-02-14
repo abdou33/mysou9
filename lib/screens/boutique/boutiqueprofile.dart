@@ -380,44 +380,6 @@ class productsTile extends StatelessWidget {
                 ],
               ),
             ),
-
-            //jkdbhngvkjghkvjfjkvlm
-            /*Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            elevation: 4.0,
-            child: Column(
-              children: [
-                Container(
-                  height: width/2-8,
-                  child: Ink.image(
-                    image: NetworkImage(image),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(6.0),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    children: [
-                      Text(
-                        name,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        price.toString() + " DA",
-                        style:
-                            TextStyle(fontSize: 20, color: Color(0xFFbe332e)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )*/
           ),
         ));
   }
